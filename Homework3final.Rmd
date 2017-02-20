@@ -1,0 +1,244 @@
+<!-- R Commander Markdown Template -->
+
+Homework 3 Regression
+=======================
+
+### Abby Mutic
+
+### 02/15/17
+ 
+```{r}
+Dataset <- 
+  
+  read.table("C:/Users/AHENDE8/Documents/R class- big data/Regression-1/White_wines.csv",
+  
+   header=TRUE, sep=",", na.strings="NA", dec=".", strip.white=TRUE)
+```
+
+
+```{r}
+library(abind, pos=15)
+```
+
+
+```{r}
+library(e1071, pos=16)
+```
+
+
+```{r}
+numSummary(Dataset[,c("alcohol", "chlorides", "citric.acid", "density", 
+  "fixed.acidity", "free.sulfur.dioxide", "pH", "quality", "residual.sugar", 
+  "sulphates", "total.sulfur.dioxide", "volatile.acidity")], statistics=c("mean", 
+  "sd", "IQR", "quantiles"), quantiles=c(0,.25,.5,.75,1))
+```
+#Based on summary statistics, there are 4898 observations with no missing data reported on any of the variables. There are 12 variables total.
+#Total sulfur dioxide and free sulfur dioxide have large SD and ranges possibly indicating some outliers could exist.
+
+#Now look at univariate distributions with histograms.
+
+```{r}
+with(Dataset, Hist(alcohol, scale="frequency", breaks="Sturges", col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(chlorides, scale="frequency", breaks="Sturges", col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(citric.acid, scale="frequency", breaks="Sturges", 
+  col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(density, scale="frequency", breaks="Sturges", col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(fixed.acidity, scale="frequency", breaks="Sturges", 
+  col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(free.sulfur.dioxide, scale="frequency", breaks="Sturges", 
+  col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(pH, scale="frequency", breaks="Sturges", col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(quality, scale="frequency", breaks="Sturges", col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(residual.sugar, scale="frequency", breaks="Sturges", 
+  col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(sulphates, scale="frequency", breaks="Sturges", col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(total.sulfur.dioxide, scale="frequency", breaks="Sturges", 
+  col="darkgray"))
+```
+
+```{r}
+with(Dataset, Hist(volatile.acidity, scale="frequency", breaks="Sturges", 
+  col="darkgray"))
+```
+#About half of the univariate histograms look right skewed. The obvious normal distributions are for the variables: alcohol, density, fixed acidity, pH. sulfates, total sulfur dioxide.  
+
+#Now look at multivariate graphs with scatterplot matrix.
+
+
+```{r}
+scatterplotMatrix(~alcohol+chlorides+citric.acid, reg.line=FALSE, smooth=FALSE, 
+  spread=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), id.n=0, diagonal = 
+  'density', data=Dataset)
+```
+
+```{r}
+scatterplotMatrix(~density+fixed.acidity+free.sulfur.dioxide, reg.line=FALSE, 
+  smooth=FALSE, spread=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), id.n=0, 
+  diagonal = 'density', data=Dataset)
+```
+
+```{r}
+scatterplotMatrix(~pH+quality+residual.sugar, reg.line=FALSE, smooth=FALSE, 
+  spread=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), id.n=0, diagonal = 
+  'density', data=Dataset)
+```
+
+```{r}
+scatterplotMatrix(~sulphates+total.sulfur.dioxide+volatile.acidity, reg.line=FALSE, 
+  smooth=FALSE, spread=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), id.n=0, 
+  diagonal = 'density', data=Dataset)
+```
+#look at a few bivariate scatterplots
+
+```{r}
+scatterplot(quality~alcohol, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+```{r}
+scatterplot(quality~chlorides, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+```{r}
+scatterplot(quality~citric.acid, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+```{r}
+scatterplot(quality~density, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+```{r}
+scatterplot(quality~fixed.acidity, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+```{r}
+scatterplot(quality~free.sulfur.dioxide, reg.line=FALSE, smooth=FALSE, spread=FALSE,
+   boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+```{r}
+scatterplot(quality~pH, reg.line=FALSE, smooth=FALSE, spread=FALSE, boxplots=FALSE, 
+  span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+```{r}
+scatterplot(quality~residual.sugar, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+```{r}
+scatterplot(quality~sulphates, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+```{r}
+scatterplot(quality~total.sulfur.dioxide, reg.line=FALSE, smooth=FALSE, 
+  spread=FALSE, boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), 
+  data=Dataset)
+```
+
+```{r}
+scatterplot(quality~volatile.acidity, reg.line=FALSE, smooth=FALSE, spread=FALSE, 
+  boxplots=FALSE, span=0.5, ellipse=FALSE, levels=c(.5, .9), data=Dataset)
+```
+
+#Build linear regression model with all variables in the model
+
+```{r}
+Regmodel1 <- 
+  lm(quality~alcohol+chlorides+citric.acid+density+fixed.acidity+free.sulfur.dioxide+pH+residual.sugar+sulphates+total.sulfur.dioxide+volatile.acidity,
+   data=Dataset)
+summary(Regmodel1)
+```
+
+#Drop all nonsiginificant variables.
+```{r}
+Regmodel2 <- lm(quality ~ alcohol+density+fixed.acidity+ free.sulfur.dioxide+pH+residual.sugar, data=Dataset)
+summary(Regmodel2)
+```
+# All variables are significant. Adjusted R squared is 23%. This means ~23% of y (quality) is due to the other variables in the model.
+
+```{r}
+stargazer(Regmodel1, Regmodel2, title = "Comparison of 2 regression outputs", type = "html")
+```
+
+#Look at output in text form
+```{r}
+stargazer(Regmodel1, Regmodel2,
+          title = "Comparison of 2 Regression outputs",
+          type = "text")
+```
+
+```{r}
+residualPlots(Regmodel2)
+```
+#Variables alcohol and pH are not near zero so I will remove them #from the model.
+
+```{r}
+Regmodel3 <- lm(quality ~ density+fixed.acidity+ free.sulfur.dioxide+residual.sugar, data=Dataset)
+summary(Regmodel3)
+```
+#Adjusted R squared lowered to 19%. Now will look at residual plots
+```{r}
+residualPlots(Regmodel3)
+```
+#All the test statistics are now significant.
+#Now run the rest of the diagnostic statistics.
+
+```{r}
+avPlots(Regmodel3, id.n=3, id.cex=0.7)
+```
+```{r}
+qqPlot(Regmodel3, id.n=3)
+```
+
+```{r}
+influenceIndexPlot(Regmodel3, id.n=3)
+```
+```{r}
+outlierTest(Regmodel2)
+```
+
+```{r}
+ncvTest(Regmodel3)
+```
+
+```{r}
+vif(Regmodel3)
+```
+ The final model includes density, fixed acidity, free sulfur dioxide, and residual sugar to predict the best qualities of white wine and/or preferences of white wine. The implications of this statistical analysis can inform wine and grape producers about the preferences of their consumers and hopefully increase sales for the wine companies.
+ This Github repository is located at 
